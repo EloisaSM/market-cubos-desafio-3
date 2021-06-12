@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 const express = require("express");
-const routes = require("./controllers/routes/routes");
+const routes = require("./routes/routes");
 
 const app = express();
 
