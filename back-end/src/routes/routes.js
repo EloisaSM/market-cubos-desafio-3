@@ -1,12 +1,16 @@
 /* eslint-disable no-undef */
 const express = require("express");
 const { register } = require("../controllers/cadastro");
+const { login } = require("../controllers/login");
+const verifyLogin = require("../middleware/filter");
 
 const route = express();
 
 //user
-route.post("/login");
+route.post("/login", login);
 route.post("/register", register);
+
+route.use(verifyLogin);
 
 route.get("/perfil");
 route.put("/perfil/:id");
