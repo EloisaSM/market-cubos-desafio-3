@@ -2,6 +2,13 @@
 const express = require("express");
 const { register } = require("../controllers/cadastro");
 const { login } = require("../controllers/login");
+const { perfil, perfilUpdate } = require("../controllers/users");
+const {
+  showProductsList,
+  showProduct,
+  productRegister,
+} = require("../controllers/products");
+
 const verifyLogin = require("../middleware/filter");
 const { perfil } = require("../controllers/users");
 
