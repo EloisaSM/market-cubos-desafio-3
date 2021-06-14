@@ -77,7 +77,29 @@ const loginUser = async ({ email, senha }) => {
   return { userInfo, token };
 };
 
+const getPerfilUser = async (id) => {
+  const error = {
+    status: 404,
+    message: "",
+  };
+
+  const queryFindProfile =
+    "select id, nome, email, nome_loja from usuarios where id = $1";
+
+  const { rows, rowCount } = await connection.query(queryFindProfile, [id]);
+
+  const user = rows[0];
+
+  if (!rowCount) {
+    error.message = "Usuário não encontrado";
+    return error;
+  }
+
+  return user;
+};
+
 module.exports = {
   registerUser,
   loginUser,
+  getPerfilUser,
 };

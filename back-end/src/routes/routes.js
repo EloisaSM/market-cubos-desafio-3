@@ -3,6 +3,7 @@ const express = require("express");
 const { register } = require("../controllers/cadastro");
 const { login } = require("../controllers/login");
 const verifyLogin = require("../middleware/filter");
+const { perfil } = require("../controllers/users");
 
 const route = express();
 
@@ -12,7 +13,7 @@ route.post("/register", register);
 
 route.use(verifyLogin);
 
-route.get("/perfil");
+route.get("/perfil", perfil);
 route.put("/perfil/:id");
 
 //products
