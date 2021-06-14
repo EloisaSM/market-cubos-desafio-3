@@ -7,10 +7,11 @@ const {
   showProductsList,
   showProduct,
   productRegister,
+  showUpdateProduct,
+  deleteProduct,
 } = require("../controllers/products");
 
 const verifyLogin = require("../middleware/filter");
-const { perfil } = require("../controllers/users");
 
 const route = express();
 
@@ -21,13 +22,13 @@ route.post("/register", register);
 route.use(verifyLogin);
 
 route.get("/perfil", perfil);
-route.put("/perfil/:id");
+route.put("/perfil", perfilUpdate);
 
 //products
-route.get("/products");
-route.get("/product/:id");
-route.post("/products");
-route.put("/products/:id");
-route.delete("/products/:id");
+route.get("/products", showProductsList);
+route.get("/products/:id", showProduct);
+route.post("/products", productRegister);
+route.put("/products/:id", showUpdateProduct);
+route.delete("/products/:id", deleteProduct);
 
 module.exports = route;
