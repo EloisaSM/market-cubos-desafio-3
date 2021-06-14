@@ -4,7 +4,7 @@ const secret = require("../secret");
 
 const verifyLogin = async (req, res, next) => {
   const {
-    header: { authorization },
+    headers: { authorization },
   } = req;
 
   if (!authorization) {
@@ -12,7 +12,9 @@ const verifyLogin = async (req, res, next) => {
   }
 
   try {
-    const { id } = jwt.verify(authorization, secret);
+    const token = authorization.replace("Bearer", "").trim();
+
+    const { id } = jwt.verify(token, secret);
 
     const queryFindById = "select * from usuarios where id = $1";
     const { rows, rowCount } = await connection.query(queryFindById, [id]);
