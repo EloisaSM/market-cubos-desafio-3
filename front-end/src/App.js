@@ -15,24 +15,37 @@ import Produtos from "./paginas/Produtos/index";
 import EditarProdutos from "./paginas/EditarProduto/index";
 import NovoProduto from "./paginas/NovoProduto/index";
 
+import { AuthProvider } from "./context/index";
+import useAuth from "./hook/useAuth";
+
+function RotasProtegidas(props) {
+  const { token } = useAuth();
+
+  return (
+    <Route render={() => (token ? props.children : <Redirect to="/" />)} />
+  );
+}
+
 function App() {
   return (
-    <div>
+    <AuthProvider>
       <Router>
         <Switch>
           <Login path="/" exact component={Login} />
           <Cadastro path="/cadastro" component={Cadastro} />
-          <EditarPerfil path="/perfil/editar" component={EditarPerfil} />
-          <Perfil path="/perfil" component={Perfil} />
-          <NovoProduto path="/produtos/novo" component={NovoProduto} />
-          <EditarProdutos
-            path="/produtos/:id/editar"
-            component={EditarProdutos}
-          />
-          <Produtos path="/produtos" component={Produtos} />
+          <RotasProtegidas>
+            <EditarPerfil path="/perfil/editar" component={EditarPerfil} />
+            <Perfil path="/perfil" component={Perfil} />
+            <NovoProduto path="/produtos/novo" component={NovoProduto} />
+            <EditarProdutos
+              path="/produtos/:id/editar"
+              component={EditarProdutos}
+            />
+            <Produtos path="/produtos" component={Produtos} />
+          </RotasProtegidas>
         </Switch>
       </Router>
-    </div>
+    </AuthProvider>
   );
 }
 
