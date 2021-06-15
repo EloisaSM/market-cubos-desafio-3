@@ -1,4 +1,4 @@
-const { getPerfilUser, updateProfile } = require("../services/services");
+const { getPerfilUser, updateProfile } = require("../services/user");
 
 const perfil = async (req, res) => {
   const {
