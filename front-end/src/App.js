@@ -22,14 +22,14 @@ function App() {
         <Switch>
           <Login path="/" exact component={Login} />
           <Cadastro path="/cadastro" component={Cadastro} />
-          <Produtos path="/produtos" component={Produtos} />
+          <EditarPerfil path="/perfil/editar" component={EditarPerfil} />
+          <Perfil path="/perfil" component={Perfil} />
           <NovoProduto path="/produtos/novo" component={NovoProduto} />
           <EditarProdutos
             path="/produtos/:id/editar"
             component={EditarProdutos}
           />
-          <Perfil path="/perfil" component={Perfil} />
-          <EditarPerfil path="/perfil/editar" component={EditarPerfil} />
+          <Produtos path="/produtos" component={Produtos} />
         </Switch>
       </Router>
     </div>
