@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import Alert from "@material-ui/lab/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import useStyles from "./style";
 
 import { Link, useHistory } from "react-router-dom";
@@ -19,18 +21,45 @@ function Login() {
     handleSubmit,
   } = useForm();
   const history = useHistory();
+  const [erro, setErro] = useState("");
+  const [open, setOpen] = useState(false);
 
   const { logar } = useAuth();
 
-  function onSubmit(data) {
-    console.log(data);
+  async function onSubmit(data) {
+    setErro("");
+    setOpen(true);
 
-    logar(() => history.push("/produtos"));
+    try {
+      const resposta = await fetch("https://desafio-m03.herokuapp.com/login", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+
+      const dados = await resposta.json();
+
+      setOpen(false);
+
+      if (!resposta.ok) {
+        setErro(dados);
+        return;
+      }
+      history.push("/produtos");
+    } catch (error) {
+      setErro(error.message);
+    }
+
+    // logar(() => );
   }
 
   return (
     <div className="login-container">
       <Typography variant="h4">Login</Typography>
+
+      {erro && <Alert severity="error">{erro}</Alert>}
       <form
         className={classes.root}
         noValidate
@@ -55,6 +84,8 @@ function Login() {
         <Button variant="contained" color="primary" type="submit">
           Primary
         </Button>
+        {open && <CircularProgress />}
+
         <span>
           Primeira vez aqui?
           <Link to="/cadastro">CRIE UMA CONTA</Link>
