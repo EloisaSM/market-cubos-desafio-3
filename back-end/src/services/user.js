@@ -1,7 +1,5 @@
 const connection = require("../connection-db/connection");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const secret = require("../secret");
 
 const getPerfilUser = async (id) => {
   const error = {
@@ -54,35 +52,30 @@ const updateProfile = async (data, id) => {
     }
   }
 
-  let queryUpdate = `update usuarios set `;
-
   if (nome) {
     user.nome = nome;
-    queryUpdate += "nome = $1, ";
   }
 
   if (nome_loja) {
     user.nome_loja = nome_loja;
-    queryUpdate += "nome_loja = $2, ";
   }
 
   if (email) {
     user.email = email;
-    queryUpdate += "email = $3, ";
   }
 
   if (senha) {
-    user.senha = senha;
-    queryUpdate += "senha = $4 ";
+    const cryptPassword = await bcrypt.hash(senha, 10);
+    user.senha = cryptPassword;
   }
 
-  queryUpdate += "where id = $5";
+  const queryUpdate = `update usuarios set nome = $1, nome_loja = $2, email = $3, senha = $4 where id = $5`;
 
   const updateUser = await connection.query(queryUpdate, [
-    nome,
-    nome_loja,
-    email,
-    senha,
+    user.nome,
+    user.nome_loja,
+    user.email,
+    user.senha,
     id,
   ]);
 

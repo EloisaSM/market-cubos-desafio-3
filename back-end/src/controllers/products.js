@@ -80,23 +80,7 @@ const showUpdateProduct = async (req, res) => {
     params: { id },
   } = req;
 
-  // if ("nome" in body && !nome) {
-  //   return res.status(400).json("Nome não pode ser vazio");
-  // }
-
-  // if ("estoque" in body && !estoque) {
-  //   return res.status(400).json("Estoque não pode ser vazio");
-  // }
-
-  // if ("preco" in body && !preco) {
-  //   return res.status(400).json("Preco não pode ser vazio");
-  // }
-
-  // if ("descricao" in body && !descricao) {
-  //   return res.status(400).json("Descricao não pode ser vazio");
-  // }
-
-  if (!Object.keys(body).length) {
+  if (!Object.keys(body).length && !nome && !estoque && !preco && !descricao) {
     return res.status(400).json("Informe os campos a serem alterados");
   }
 
@@ -104,11 +88,11 @@ const showUpdateProduct = async (req, res) => {
     const product = await updateProduct(body, userId, id);
     const { status, message } = product;
 
-    if (status) {
+    if (status !== 200) {
       return res.status(status).json(message);
     }
 
-    return res.status(200).json("Produto atualizado");
+    return res.status(status).json(message);
   } catch (error) {
     return res.status(400).json(error.message);
   }

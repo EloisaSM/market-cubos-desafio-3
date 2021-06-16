@@ -88,58 +88,61 @@ const updateProduct = async (data, userId, id) => {
     userId,
   ]);
 
-  const error = {
-    status: 404,
+  const producUpdate = {
+    status: "",
     message: "",
   };
 
   if (!rowCount) {
-    error.message = "Produto não encontrado";
-    return error;
+    producUpdate.message = "Produto não encontrado";
+    producUpdate.status = 404;
+    return producUpdate;
   }
 
   const product = rows[0];
 
-  let queryUpdate = "update produtos set";
+  const queryUpdate =
+    "update produtos set nome = $1, estoque = $2, preco = $3, descricao = $4, imagem = $5 where id = $6";
 
   if (nome) {
     product.nome = nome;
-    queryUpdate += "nome = $1, ";
   }
 
   if (estoque) {
     product.estoque = estoque;
-    queryUpdate += "estoque = $2, ";
   }
 
   if (preco) {
     product.preco = preco;
-    queryUpdate += "preco = $3, ";
   }
 
   if (descricao) {
     product.descricao = descricao;
-    queryUpdate += "descricao = $4, ";
   }
 
   if (imagem) {
     product.imagem = imagem;
-    queryUpdate += " imagem = $5 ";
   }
 
-  queryUpdate += "where id = $6";
-
-  console.log(queryUpdate);
-
   const updateProduct = await connection.query(queryUpdate, [
-    nome,
-    estoque,
-    preco,
-    descricao,
-    imagem,
+    product.nome,
+    product.estoque,
+    product.preco,
+    product.descricao,
+    product.imagem,
     id,
   ]);
-  console.log(updateProduct);
+
+  if (!updateProduct.rowCount) {
+    producUpdate.status = 400;
+    producUpdate.message = "Não foi possivel atualizar o produto";
+    return producUpdate;
+  }
+
+  producUpdate.status = 200;
+  producUpdate.message = "Produto atualizado com sucesso!";
+
+  return producUpdate;
 };
 
 const removeProduct = async (id, userId) => {

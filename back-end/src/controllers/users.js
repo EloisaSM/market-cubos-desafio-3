@@ -22,10 +22,11 @@ const perfil = async (req, res) => {
 const perfilUpdate = async (req, res) => {
   const {
     body,
+    body: { nome, email, senha, nome_loja },
     usuario: { id },
   } = req;
 
-  if (!Object.keys(body).length) {
+  if (!Object.keys(body).length && !nome && !email && !senha && !nome_loja) {
     return res.status(400).json("Informe os campos a serem alterados");
   }
 
