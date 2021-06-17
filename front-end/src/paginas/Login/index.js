@@ -31,7 +31,7 @@ function Login() {
     setOpen(true);
 
     try {
-      const resposta = await fetch("https://desafio-m03.herokuapp.com/login", {
+      const resposta = await fetch("http://localhost:8000/login", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {
@@ -47,12 +47,13 @@ function Login() {
         setErro(dados);
         return;
       }
+
+      logar(dados.token);
+
       history.push("/produtos");
     } catch (error) {
       setErro(error.message);
     }
-
-    // logar(() => );
   }
 
   return (
@@ -82,7 +83,7 @@ function Login() {
         {errors.senha?.type === "required" && "Campo Obrigatório"}
 
         <Button variant="contained" color="primary" type="submit">
-          Primary
+          Entrar
         </Button>
         {open && <CircularProgress />}
 
