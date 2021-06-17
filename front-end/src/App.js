@@ -21,9 +21,7 @@ import useAuth from "./hook/useAuth";
 function RotasProtegidas(props) {
   const { token } = useAuth();
 
-  return (
-    <Route render={() => (token ? props.children : <Redirect to="/" />)} />
-  );
+  return token ? props.children : <Redirect to="/" />;
 }
 
 function App() {
@@ -31,17 +29,14 @@ function App() {
     <AuthProvider>
       <Router>
         <Switch>
-          <Login path="/" exact component={Login} />
-          <Cadastro path="/cadastro" component={Cadastro} />
+          <Route path="/" exact component={Login} />
+          <Route path="/cadastro" component={Cadastro} />
           <RotasProtegidas>
-            <EditarPerfil path="/perfil/editar" component={EditarPerfil} />
-            <Perfil path="/perfil" component={Perfil} />
-            <NovoProduto path="/produtos/novo" component={NovoProduto} />
-            <EditarProdutos
-              path="/produtos/:id/editar"
-              component={EditarProdutos}
-            />
-            <Produtos path="/produtos" component={Produtos} />
+            <Route path="/perfil" exact component={Perfil} />
+            <Route path="/perfil/editar" component={EditarPerfil} />
+            <Route path="/produtos" exact component={Produtos} />
+            <Route path="/produtos/novo" component={NovoProduto} />
+            <Route path="/produtos/:id/editar" component={EditarProdutos} />
           </RotasProtegidas>
         </Switch>
       </Router>
