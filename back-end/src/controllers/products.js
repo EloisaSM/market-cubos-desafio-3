@@ -14,12 +14,18 @@ const showProductsList = async (req, res) => {
   } = req;
 
   try {
-    const querySelectProducts = `select * from produtos where usuario_id = $1 and categoria = $2`;
+    let querySelectProducts = `select * from produtos where usuario_id = $1`;
+    const parametros = [id];
 
-    const { rows: productsList } = await connection.query(querySelectProducts, [
-      id,
-      categoria,
-    ]);
+    if (categoria) {
+      querySelectProducts += " and categoria = $2";
+      parametros.push(categoria);
+    }
+
+    const { rows: productsList } = await connection.query(
+      querySelectProducts,
+      parametros
+    );
 
     return res.status(200).json(productsList);
   } catch (error) {
