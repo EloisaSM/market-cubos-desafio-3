@@ -6,6 +6,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     gap: "48px",
   },
+  perfilContainer: {
+    marginLeft: "80px",
+  },
 }));
 
 export default useStyles;
