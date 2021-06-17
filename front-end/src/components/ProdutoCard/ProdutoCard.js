@@ -14,7 +14,7 @@ const useStyles = makeStyles({
     width: "232px",
   },
   media: {
-    height: 140,
+    height: 240,
   },
   produtoInfo: {
     marginTop: "11px",
@@ -24,27 +24,26 @@ const useStyles = makeStyles({
   },
 });
 
-function ProdutoCard() {
+function ProdutoCard({ nome, estoque, categoria, preco, descricao, imagem }) {
   const classes = useStyles();
   return (
     <Card className={classes.root}>
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image="http://placehold.it/240x230"
+          image={imagem}
           title="Contemplative Reptile"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            Nome do Produto
+            {nome}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
+            {descricao}
           </Typography>
           <div className={classes.produtoInfo}>
-            <span className={classes.produtoEstoque}>3 unidades</span>
-            <span> R$ 99.99</span>
+            <span className={classes.produtoEstoque}>{estoque} unidades</span>
+            <span> R$ {preco}</span>
           </div>
         </CardContent>
       </CardActionArea>
