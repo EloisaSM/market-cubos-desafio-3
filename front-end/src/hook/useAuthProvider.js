@@ -1,22 +1,20 @@
 import { useState } from "react";
 
 function useAuthProvider() {
-  const [token, setToken] = useState(false);
+  const [token, setToken] = useState(null);
 
-  const logar = (cb) => {
-    setToken(true);
-    cb();
+  const logar = (token) => {
+    setToken(token);
   };
 
   const deslogar = (cb) => {
-    setToken(false);
+    setToken(null);
     cb();
   };
 
   return {
     token,
     logar,
-    deslogar,
   };
 }
 
