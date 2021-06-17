@@ -1,9 +1,9 @@
 body {
   background-color: #E5E5E5;
-  display: grid;
+  /* display: grid;
 
   place-content: center;
-  place-items: center;
+  place-items: center; */
 
-  height: 100vh;
+  /* height: 100vh; */
 }
