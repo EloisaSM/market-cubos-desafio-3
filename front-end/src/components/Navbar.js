@@ -31,14 +31,17 @@ function Navbar() {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar className={classes.sidebarContainer}>
-          <div className={classes.loja}>
-            <Link to="/produtos" />
-            <Loja />
-          </div>
-          <div className={classes.perfil}>
-            <Link to="/perfil" />
-            <Perfil />
-          </div>
+          <Link to="/produtos">
+            <div className={classes.loja}>
+              <Loja />
+            </div>
+          </Link>
+          <Link to="/perfil">
+            <div className={classes.perfil}>
+              <Perfil />
+            </div>
+          </Link>
+
           <div className={classes.logout}>
             <Close />
           </div>
