@@ -28,10 +28,9 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
     padding: 45,
   },
-  Typography: {
-    h4: {
-      marginBottom: "80px",
-    },
+
+  widthSenha: {
+    width: "80%",
   },
 }));
 

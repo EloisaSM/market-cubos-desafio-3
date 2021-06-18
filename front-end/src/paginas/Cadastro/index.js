@@ -6,6 +6,14 @@ import Typography from "@material-ui/core/Typography";
 import Alert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import useStyles from "./style";
+import clsx from "clsx";
+import IconButton from "@material-ui/core/IconButton";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import FormControl from "@material-ui/core/FormControl";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
 import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -22,6 +30,14 @@ function Cadastro() {
   const [erro, setErro] = useState("");
   const [open, setOpen] = useState(false);
 
+  const [values, setValues] = useState({
+    showPassword: false,
+  });
+
+  const handleClickMostrarSenha = () => {
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
+
   async function onSubmit(data) {
     setErro("");
     setOpen(true);
@@ -35,7 +51,7 @@ function Cadastro() {
         },
       });
 
-      const dados = await resposta.json();
+      await resposta.json();
 
       console.log(resposta);
 
@@ -52,70 +68,89 @@ function Cadastro() {
     }
   }
   return (
-    <div className="login-container">
-      <Typography variant="h4">Criar uma conta </Typography>
+    <div className={classes.containerContent}>
+      <div>
+        <form
+          className={classes.root}
+          noValidate
+          autoComplete="off"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <Typography variant="h4">Criar uma conta </Typography>
+          <TextField
+            label="Nome"
+            {...register("nome", { required: true })}
+            type="text"
+          />
+          {errors.nome?.type === "required" && "Campo Obrigatório"}
 
-      <form
-        className={classes.root}
-        noValidate
-        autoComplete="off"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <TextField
-          label="Nome"
-          {...register("nome", { required: true })}
-          type="text"
-        />
-        {errors.nome?.type === "required" && "Campo Obrigatório"}
+          <TextField
+            label="Nome da Loja"
+            {...register("nomeLoja", { required: true })}
+            type="text"
+          />
+          {errors.nomeLoja?.type === "required" && "Campo Obrigatório"}
 
-        <TextField
-          label="Nome da Loja"
-          {...register("nomeLoja", { required: true })}
-          type="text"
-        />
-        {errors.nomeLoja?.type === "required" && "Campo Obrigatório"}
+          <TextField
+            label="Email"
+            {...register("Email", { required: true })}
+            type="email"
+          />
+          {errors.email?.type === "required" && "Campo Obrigatório"}
 
-        <TextField
-          label="Email"
-          {...register("Email", { required: true })}
-          type="email"
-        />
-        {errors.email?.type === "required" && "Campo Obrigatório"}
+          <FormControl className={clsx(classes.widthSenha)}>
+            <InputLabel htmlFor="senha">Senha</InputLabel>
+            <Input
+              id="senha-Repetida"
+              {...register("senha")}
+              type={values.showPassword ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="mudando visibilidade da senha"
+                    onClick={handleClickMostrarSenha}
+                  >
+                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
 
-        <TextField
-          label="Senha"
-          type="password"
-          {...register("senha", { required: true })}
-        />
-        {errors.senha?.type === "required" && "Campo Obrigatório"}
+          <FormControl className={clsx(classes.widthSenha)}>
+            <InputLabel htmlFor="senha">Repita a nova senha</InputLabel>
+            <Input
+              id="senha"
+              {...register("senhaRepetida")}
+              type={values.showPassword ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="mudando visibilidade da senha"
+                    onClick={handleClickMostrarSenha}
+                  >
+                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+          {errors.repetirSenha?.type === "validate" &&
+            "Senhas precisam ser iguais"}
 
-        <TextField
-          label="Repita a Senha"
-          type="password"
-          name="repetirSenha"
-          {...register("repetirSenha", {
-            validate: (value) => {
-              return value === watch("senha");
-            },
-          })}
-        />
-        {errors.repetirSenha?.type === "validate" &&
-          "Senhas precisam ser iguais"}
+          <Button variant="contained" color="primary" type="submit">
+            CRIAR CONTA
+          </Button>
 
-        <Button variant="contained" color="primary" type="submit">
-          CRIAR CONTA
-        </Button>
+          {erro && <Alert severity="error">{erro}</Alert>}
+          {open && <CircularProgress />}
 
-        {erro && <Alert severity="error">{erro}</Alert>}
-        {open && <CircularProgress />}
-
-        <span>
-          Primeira vez aqui?
-          <Link to="/" style={{ color: "blue" }}>
-            ACESSE
-          </Link>
-        </span>
-      </form>
+          <div>
+            <span className={classes.margin}>Primeira vez aqui?</span>
+            <Link to="/cadastro">CRIE UMA CONTA</Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
