@@ -1,9 +1,0 @@
-.login-container {
-  display: grid;
-  place-content: center;
-
-  width: 390px;
-  height: 590px;
-
-  background-color: #ffff;
-}
