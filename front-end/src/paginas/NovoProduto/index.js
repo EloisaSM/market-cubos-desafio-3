@@ -11,6 +11,8 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Alert from "@material-ui/lab/Alert";
 import Divider from "@material-ui/core/Divider";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { useStyles } from "./style";
 import { ColorButton } from "./style";
@@ -22,12 +24,13 @@ function NovoProduto() {
   const classes = useStyles();
   const history = useHistory();
   const { register, handleSubmit } = useForm();
-
   const [erro, setErro] = useState("");
+  const [carregando, setCarregando] = useState(false);
 
   const { token } = useAuth();
 
   async function onSubmit(data) {
+    setCarregando(true);
     setErro("");
 
     try {
@@ -41,6 +44,7 @@ function NovoProduto() {
       });
 
       const dados = await resposta.json();
+      setCarregando(false);
 
       if (!resposta.ok) {
         setErro(dados);
@@ -56,6 +60,9 @@ function NovoProduto() {
   return (
     <div className={classes.root}>
       <Navbar />
+      <Backdrop className={classes.backdrop} open={carregando}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <div className={classes.lojaContainer}>
         <Typography variant="h3">Nome da Loja</Typography>
         <Typography className={classes.subtitle} variant="subtitle1">
