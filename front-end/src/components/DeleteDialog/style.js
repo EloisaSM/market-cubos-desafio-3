@@ -3,7 +3,8 @@ import { withStyles } from "@material-ui/core/styles";
 
 export const ColorButton = withStyles((theme) => ({
   root: {
-    top: "32%",
+    top: "5%",
+    left: "3%",
     color: "rgb(0, 0, 0, 0.7)",
     padding: 12,
     zIndex: 1,

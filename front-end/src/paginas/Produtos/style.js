@@ -2,6 +2,10 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "232px",
+    position: "relative",
+  },
   conteudoContainer: {
     display: "flex",
 
