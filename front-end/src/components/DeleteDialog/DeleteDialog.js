@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -6,54 +6,16 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-import { ColorButton } from "./style";
-
-import { ReactComponent as Delete } from "../../assets/delete.svg";
-
-import useAuth from "../../hook/useAuth";
-
-export default function AlertDialog({ id }) {
-  const [open, setOpen] = useState(false);
-  const { token } = useAuth();
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const deletarProduto = async () => {
-    try {
-      const resposta = await fetch(`http://localhost:8000/products/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      await resposta.json();
-
-      handleClose();
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
+export default function AlertDialog({
+  confirmAction,
+  declineAction,
+  isOpened = false,
+  id,
+}) {
   return (
     <div>
-      <ColorButton
-        variant="contained"
-        color="primary"
-        onClick={handleClickOpen}
-      >
-        <Delete />
-      </ColorButton>
       <Dialog
-        open={open}
-        onClose={handleClose}
+        open={isOpened}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -67,11 +29,11 @@ export default function AlertDialog({ id }) {
         </DialogContent>
         <DialogActions>
           <span>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={declineAction} color="primary">
               Manter Produto
             </Button>
           </span>
-          <Button onClick={deletarProduto} color="primary" autoFocus>
+          <Button onClick={() => confirmAction(id)} color="primary" autoFocus>
             Remover
           </Button>
         </DialogActions>
