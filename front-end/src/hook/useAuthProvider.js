@@ -1,20 +1,26 @@
 import { useState } from "react";
+import { useLocalStorage } from "react-use";
 
 function useAuthProvider() {
-  const [token, setToken] = useState(null);
+  const [tokenPersistido, setTokenPersistido, removeTokenPersistido] =
+    useLocalStorage("TOKEN", null);
+
+  const [token, setToken] = useState(tokenPersistido);
 
   const logar = (token) => {
     setToken(token);
+    setTokenPersistido(token);
   };
 
-  const deslogar = (cb) => {
+  const deslogar = () => {
     setToken(null);
-    cb();
+    removeTokenPersistido();
   };
 
   return {
     token,
     logar,
+    deslogar,
   };
 }
 
