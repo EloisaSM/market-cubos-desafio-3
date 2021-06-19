@@ -18,6 +18,7 @@ export const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     gap: 30,
 
+    minWidth: "80%",
     padding: "78px 0 24px 74px",
   },
   formContainer: {
