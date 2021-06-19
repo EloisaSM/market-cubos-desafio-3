@@ -8,12 +8,14 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
-import Navbar from "../../components/Navbar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import Alert from "@material-ui/lab/Alert";
-import { useStyles } from "./style";
+import Divider from "@material-ui/core/Divider";
 
+import { useStyles } from "./style";
+import { ColorButton } from "./style";
+
+import Navbar from "../../components/Navbar/Navbar";
 import useAuth from "../../hook/useAuth";
 
 function NovoProduto() {
@@ -22,15 +24,11 @@ function NovoProduto() {
   const { register, handleSubmit } = useForm();
 
   const [erro, setErro] = useState("");
-  const [open, setOpen] = useState(false);
 
   const { token } = useAuth();
 
   async function onSubmit(data) {
-    setOpen(true);
     setErro("");
-
-    console.log(data);
 
     try {
       const resposta = await fetch("http://localhost:8000/products", {
@@ -44,30 +42,28 @@ function NovoProduto() {
 
       const dados = await resposta.json();
 
-      setOpen(false);
-
       if (!resposta.ok) {
         setErro(dados);
         return;
       }
 
-      history.push("/");
+      history.push("/produtos");
     } catch (error) {
       setErro(error.message);
     }
   }
 
   return (
-    <div className="conteudo-container">
+    <div className={classes.root}>
       <Navbar />
-      <div className="loja-container">
+      <div className={classes.lojaContainer}>
         <Typography variant="h3">Nome da Loja</Typography>
         <Typography className={classes.subtitle} variant="subtitle1">
           Adicionar produto
         </Typography>
 
         <form
-          className={classes.root}
+          className={classes.formContainer}
           noValidate
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
@@ -108,12 +104,19 @@ function NovoProduto() {
 
           <TextField label="Imagem" {...register("imagem")} type="text" />
 
-          <Link to="/produtos">CANCELAR</Link>
-          <Button variant="contained" color="primary" type="submit">
-            <Typography variant="button" display="block" gutterBottom>
-              adicionar produto
-            </Typography>
-          </Button>
+          <Divider className={classes.divider} />
+
+          <div>
+            <Link className={classes.link} to="/produtos">
+              CANCELAR
+            </Link>
+
+            <ColorButton variant="contained" color="primary" type="submit">
+              <Typography variant="button" display="block" gutterBottom>
+                adicionar produto
+              </Typography>
+            </ColorButton>
+          </div>
         </form>
         {erro && <Alert severity="error">{erro}</Alert>}
       </div>
