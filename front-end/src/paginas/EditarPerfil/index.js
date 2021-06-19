@@ -16,8 +16,10 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import Divider from "@material-ui/core/Divider";
 
-import NavBar from "../../components/Navbar";
+import { ColorButton } from "./style";
+import NavBar from "../../components/Navbar/Navbar";
 import useStyles from "./style";
 
 import useAuth from "../../hook/useAuth";
@@ -26,10 +28,16 @@ function EditarPerfil() {
   const classes = useStyles();
   const [erro, setErro] = useState("");
   const [carregando, setCarregando] = useState(false);
+  const history = useHistory();
   const [values, setValues] = useState({
     showPassword: false,
   });
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    watch,
+  } = useForm({ mode: "onChange" });
 
   const { token } = useAuth();
 
@@ -62,18 +70,20 @@ function EditarPerfil() {
         setErro(dados);
         return;
       }
+
+      history.push("/perfil");
     } catch (error) {
       setErro(error.message);
     }
   }
 
   return (
-    <div className="conteudo-container">
+    <div className={classes.root}>
       <NavBar />
       <div className={classes.perfilInfo}>
         <Typography variant="h4">Editar Perfil</Typography>
         <form
-          className={classes.root}
+          className={classes.formContainer}
           noValidate
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
@@ -92,7 +102,6 @@ function EditarPerfil() {
             <InputLabel htmlFor="senha">Senha</InputLabel>
             <Input
               id="senha-Repetida"
-              {...register("senha")}
               type={values.showPassword ? "text" : "password"}
               endAdornment={
                 <InputAdornment position="end">
@@ -111,7 +120,11 @@ function EditarPerfil() {
             <InputLabel htmlFor="senha">Repita a nova senha</InputLabel>
             <Input
               id="senha"
-              {...register("senhaRepetida")}
+              {...register("repetirSenha", {
+                validate: (value) => {
+                  return value === watch("senha");
+                },
+              })}
               type={values.showPassword ? "text" : "password"}
               endAdornment={
                 <InputAdornment position="end">
@@ -125,14 +138,27 @@ function EditarPerfil() {
               }
             />
           </FormControl>
+          {errors.repetirSenha?.type === "validate" &&
+            "Senhas precisam ser iguais"}
 
-          <Link to="/perfil">CANCELAR</Link>
+          <Divider className={classes.divider} />
 
-          <Button variant="contained" color="primary" type="submit">
-            <Typography variant="button" display="block" gutterBottom>
-              editar perfil
-            </Typography>
-          </Button>
+          <div>
+            <Link className={classes.link} to="/perfil">
+              CANCELAR
+            </Link>
+
+            <ColorButton
+              variant="contained"
+              color="primary"
+              onClick={() => history.push("/perfil/editar")}
+              type="submit"
+            >
+              <Typography variant="button" display="block" gutterBottom>
+                editar perfil
+              </Typography>
+            </ColorButton>
+          </div>
           {erro && <Alert severity="error">{erro}</Alert>}
           {carregando && <CircularProgress />}
         </form>
