@@ -48,7 +48,7 @@ function ListaProdutos() {
 
     carregarProdutos();
     getPerfil();
-  }, [produtos]);
+  }, []);
 
   return (
     <div className={classes.conteudoContainer}>
@@ -60,7 +60,7 @@ function ListaProdutos() {
         <div className={classes.containerProdutos}>
           {produtos &&
             produtos.map((p) => (
-              <div key={p.id}>
+              <div className={classes.root} key={p.id}>
                 <DeleteDialog id={p.id} />
                 <Link to={`/produtos/${p.id}/editar`}>
                   <ProdutoCard {...p} />
