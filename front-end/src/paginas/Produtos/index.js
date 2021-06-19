@@ -5,6 +5,10 @@ import Navbar from "../../components/Navbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
+import useAuth from "../../hook/useAuth";
+
+import useStyles from "./style";
+import { ColorButton } from "./style";
 import ProdutoCard from "../../components/ProdutoCard/ProdutoCard";
 import "./style.css";
 
