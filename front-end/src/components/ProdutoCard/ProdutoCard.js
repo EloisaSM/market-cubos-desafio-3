@@ -10,9 +10,6 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles({
-  root: {
-    width: "232px",
-  },
   media: {
     height: 240,
   },
@@ -21,29 +18,45 @@ const useStyles = makeStyles({
   },
   produtoEstoque: {
     marginRight: "64px",
+    color: "rgba(101, 101, 101, 0.87)",
   },
 });
 
-function ProdutoCard({ nome, estoque, categoria, preco, descricao, imagem }) {
+function ProdutoCard({
+  nome,
+  estoque,
+  categoria,
+  preco,
+  descricao,
+  imagem,
+  id,
+}) {
   const classes = useStyles();
   return (
     <Card className={classes.root}>
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image={imagem}
+          image={`${imagem}`}
           title="Contemplative Reptile"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             {nome}
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography
+            variant="body2"
+            color="rgba(34, 34, 34, 0.87)"
+            component="p"
+          >
             {descricao}
           </Typography>
           <div className={classes.produtoInfo}>
             <span className={classes.produtoEstoque}>{estoque} unidades</span>
-            <span> R$ {preco}</span>
+            <span style={{ fontWeight: 700 }}>
+              {" "}
+              R$ {(preco / 100).toFixed(2)}
+            </span>
           </div>
         </CardContent>
       </CardActionArea>
