@@ -4,7 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+
 import Typography from "@material-ui/core/Typography";
 import Alert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
