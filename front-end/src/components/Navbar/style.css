@@ -1,0 +1,17 @@
+.sidebar-container{
+  background-color: #434343;
+  height: 100vh;
+  width: 138px;
+
+  padding-top: 113px;
+
+  border-radius: 0px 0px 32px 0px;
+}
+
+.btn-container{
+  cursor: pointer;
+  display: grid;
+    gap: 24px;
+    place-content: center;
+    place-items: center;
+}
