@@ -35,7 +35,7 @@ function Perfil() {
   }, []);
 
   return (
-    <div className="conteudo-container">
+    <div className={classes.root}>
       <NavBar />
 
       <div className={classes.perfilContainer}>
