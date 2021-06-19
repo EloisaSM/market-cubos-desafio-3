@@ -8,14 +8,14 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import useStyles from "./style";
 
 import { Link, useHistory } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
 import useAuth from "../../hook/useAuth";
 
 function Login() {
   const classes = useStyles();
   const {
-    register,
+    control,
     formState: { errors },
     handleSubmit,
   } = useForm();
@@ -65,20 +65,38 @@ function Login() {
       >
         {erro && <Alert severity="error">{erro}</Alert>}
         <Typography variant="h4">Login</Typography>
-        <TextField
-          label="E-mail"
-          {...register("email", { required: true })}
-          type="email"
+        <Controller
+          name="email"
+          control={control}
+          defaultValue=""
+          rules={{ required: "campo obrigatório" }}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <TextField
+              label="email"
+              value={value}
+              onChange={onChange}
+              error={!!error}
+              helperText={error ? error.message : null}
+            />
+          )}
         />
-        {errors.email?.type === "required" && "Campo Obrigatório"}
 
-        <TextField
-          label="Senha"
-          type="password"
-          {...register("senha", { required: true })}
-          required
+        <Controller
+          name="senha"
+          control={control}
+          defaultValue=""
+          rules={{ required: "campo obrigatório" }}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <TextField
+              label="senha"
+              type="password"
+              value={value}
+              onChange={onChange}
+              error={!!error}
+              helperText={error ? error.message : null}
+            />
+          )}
         />
-        {errors.senha?.type === "required" && "Campo Obrigatório"}
 
         <Button variant="contained" color="primary" type="submit">
           Entrar
