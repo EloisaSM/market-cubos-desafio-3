@@ -10,7 +10,6 @@ import useStyles from "./style";
 import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import "./Login.css";
 import useAuth from "../../hook/useAuth";
 
 function Login() {
@@ -22,13 +21,13 @@ function Login() {
   } = useForm();
   const history = useHistory();
   const [erro, setErro] = useState("");
-  const [open, setOpen] = useState(false);
+  const [carregando, setCarregando] = useState(false);
 
   const { logar } = useAuth();
 
   async function onSubmit(data) {
+    setCarregando(true);
     setErro("");
-    setOpen(true);
 
     try {
       const resposta = await fetch("http://localhost:8000/login", {
@@ -41,7 +40,7 @@ function Login() {
 
       const dados = await resposta.json();
 
-      setOpen(false);
+      setCarregando(false);
 
       if (!resposta.ok) {
         setErro(dados);
@@ -57,16 +56,15 @@ function Login() {
   }
 
   return (
-    <div className="login-container">
-      <Typography variant="h4">Login</Typography>
-
-      {erro && <Alert severity="error">{erro}</Alert>}
+    <div className={classes.containerContent}>
       <form
         className={classes.root}
         noValidate
         autoComplete="off"
         onSubmit={handleSubmit(onSubmit)}
       >
+        {erro && <Alert severity="error">{erro}</Alert>}
+        <Typography variant="h4">Login</Typography>
         <TextField
           label="E-mail"
           {...register("email", { required: true })}
@@ -85,12 +83,11 @@ function Login() {
         <Button variant="contained" color="primary" type="submit">
           Entrar
         </Button>
-        {open && <CircularProgress />}
-
-        <span>
-          Primeira vez aqui?
+        <div>
+          <span className={classes.margin}>Primeira vez aqui?</span>
           <Link to="/cadastro">CRIE UMA CONTA</Link>
-        </span>
+        </div>
+        {carregando && <CircularProgress />}
       </form>
     </div>
   );
