@@ -25,10 +25,10 @@ function Cadastro() {
     formState: { errors },
     handleSubmit,
     watch,
-  } = useForm();
+  } = useForm({ mode: "onChange" });
   const history = useHistory();
   const [erro, setErro] = useState("");
-  const [open, setOpen] = useState(false);
+  const [carregando, setCarregando] = useState(false);
 
   const [values, setValues] = useState({
     showPassword: false,
@@ -40,7 +40,7 @@ function Cadastro() {
 
   async function onSubmit(data) {
     setErro("");
-    setOpen(true);
+    setCarregando(true);
 
     try {
       const resposta = await fetch("http://localhost:8000/register", {
@@ -51,16 +51,14 @@ function Cadastro() {
         },
       });
 
-      await resposta.json();
+      const dados = await resposta.json();
 
-      console.log(resposta);
+      setCarregando(false);
 
-      setOpen(false);
-
-      // if (!resposta.ok) {
-      //   setErro(dados);
-      //   return;
-      // }
+      if (!resposta.ok) {
+        setErro(dados);
+        return;
+      }
 
       history.push("/");
     } catch (error) {
@@ -79,7 +77,9 @@ function Cadastro() {
           <Typography variant="h4">Criar uma conta </Typography>
           <TextField
             label="Nome"
-            {...register("nome", { required: true })}
+            {...register("nome", {
+              required: true,
+            })}
             type="text"
           />
           {errors.nome?.type === "required" && "Campo Obrigatório"}
@@ -93,7 +93,7 @@ function Cadastro() {
 
           <TextField
             label="Email"
-            {...register("Email", { required: true })}
+            {...register("email", { required: true })}
             type="email"
           />
           {errors.email?.type === "required" && "Campo Obrigatório"}
@@ -101,7 +101,7 @@ function Cadastro() {
           <FormControl className={clsx(classes.widthSenha)}>
             <InputLabel htmlFor="senha">Senha</InputLabel>
             <Input
-              id="senha-Repetida"
+              id="senha"
               {...register("senha")}
               type={values.showPassword ? "text" : "password"}
               endAdornment={
@@ -120,8 +120,12 @@ function Cadastro() {
           <FormControl className={clsx(classes.widthSenha)}>
             <InputLabel htmlFor="senha">Repita a nova senha</InputLabel>
             <Input
-              id="senha"
-              {...register("senhaRepetida")}
+              id="senha-repetida"
+              {...register("repetirSenha", {
+                validate: (value) => {
+                  return value === watch("senha");
+                },
+              })}
               type={values.showPassword ? "text" : "password"}
               endAdornment={
                 <InputAdornment position="end">
@@ -143,11 +147,11 @@ function Cadastro() {
           </Button>
 
           {erro && <Alert severity="error">{erro}</Alert>}
-          {open && <CircularProgress />}
+          {carregando && <CircularProgress />}
 
           <div>
             <span className={classes.margin}>Primeira vez aqui?</span>
-            <Link to="/cadastro">CRIE UMA CONTA</Link>
+            <Link to="/">ACESSE</Link>
           </div>
         </form>
       </div>
