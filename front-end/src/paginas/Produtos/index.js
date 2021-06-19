@@ -28,7 +28,7 @@ function ListaProdutos() {
 
   const [modalOpened, setModalOpened] = useState(false);
   const [modalId, setModalId] = useState(undefined);
-  const [loading, setLoading] = useState(false);
+  const [carregando, setCarregando] = useState(false);
 
   const carregarProdutos = useCallback(async () => {
     const resposta = await fetch("http://localhost:8000/products", {
@@ -75,11 +75,11 @@ function ListaProdutos() {
   }, []);
 
   const modalConfirmAction = useCallback(async (id) => {
-    setLoading(true);
+    setCarregando(true);
     await deletarProduto(id);
     carregarProdutos();
     setModalOpened(false);
-    setLoading(false);
+    setCarregando(false);
   }, []);
 
   const modalDeclineAction = useCallback(() => {
@@ -94,7 +94,7 @@ function ListaProdutos() {
   return (
     <div className={classes.conteudoContainer}>
       <Navbar />
-      <Backdrop className={classes.backdrop} open={loading}>
+      <Backdrop className={classes.backdrop} open={carregando}>
         <CircularProgress color="inherit" />
       </Backdrop>
       <div className={classes.lojaContainer}>

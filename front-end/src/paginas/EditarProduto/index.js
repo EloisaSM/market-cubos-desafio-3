@@ -10,12 +10,13 @@ import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import Alert from "@material-ui/lab/Alert";
 import Divider from "@material-ui/core/Divider";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { ColorButton } from "./style";
-import { useStyles } from "../NovoProduto/style";
+import useStyles from "../EditarProduto/style";
 
 import Navbar from "../../components/Navbar/Navbar";
 import useAuth from "../../hook/useAuth";
@@ -25,6 +26,7 @@ function EditarProduto() {
   const history = useHistory();
   const { register, handleSubmit } = useForm();
   const [erro, setErro] = useState("");
+  const [carregando, setCarregando] = useState(false);
   const [infoProduto, setInfoProduto] = useState({});
   const [infoLoja, setInfoLoja] = useState({});
 
@@ -32,6 +34,7 @@ function EditarProduto() {
   const { id } = useParams();
 
   async function onSubmit(data) {
+    setCarregando(true);
     setErro("");
     try {
       const resposta = await fetch(`http://localhost:8000/products/${id}`, {
@@ -43,6 +46,8 @@ function EditarProduto() {
         },
       });
       const dados = await resposta.json();
+
+      setCarregando(false);
 
       if (!resposta.ok) {
         setErro(dados);
@@ -87,6 +92,9 @@ function EditarProduto() {
   return (
     <div className={classes.root}>
       <Navbar />
+      <Backdrop className={classes.backdrop} open={carregando}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <div className={classes.lojaContainer}>
         <Typography variant="h3">{infoLoja.nome_loja}</Typography>
         <Typography className={classes.subtitle} variant="subtitle1">
@@ -99,43 +107,62 @@ function EditarProduto() {
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <TextField
-            label="Nome do produto"
-            {...register("nome")}
-            type="text"
-          />
-
-          <div className={classes.precoEstoqueContainer}>
-            <FormControl className={classes.margin}>
-              <InputLabel htmlFor="standard-adornment-amount">Preço</InputLabel>
-              <Input
-                {...register("preco")}
-                startAdornment={
-                  <InputAdornment position="start">$</InputAdornment>
-                }
+          <div className={classes.containerImgInput}>
+            <div className={classes.inputs}>
+              <TextField
+                label="Nome do produto"
+                {...register("nome")}
+                type="text"
               />
-            </FormControl>
 
-            <FormControl className={classes.margin}>
-              <InputLabel htmlFor="standard-adornment-amount">
-                Estoque
-              </InputLabel>
-              <Input
-                {...register("estoque")}
-                startAdornment={
-                  <InputAdornment position="start">Un</InputAdornment>
-                }
+              <div className={classes.precoEstoqueContainer}>
+                <FormControl className={classes.margin}>
+                  <InputLabel htmlFor="standard-adornment-amount">
+                    Preço
+                  </InputLabel>
+                  <Input
+                    {...register("preco")}
+                    startAdornment={
+                      <InputAdornment position="start">$</InputAdornment>
+                    }
+                  />
+                </FormControl>
+
+                <FormControl className={classes.margin}>
+                  <InputLabel htmlFor="standard-adornment-amount">
+                    Estoque
+                  </InputLabel>
+                  <Input
+                    {...register("estoque")}
+                    startAdornment={
+                      <InputAdornment position="start">Un</InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </div>
+
+              <TextField
+                label="Descrição do produto"
+                {...register("descricao")}
+                type="text"
               />
-            </FormControl>
+
+              <TextField label="Imagem" {...register("imagem")} type="text" />
+            </div>
+
+            <div className={classes.imgBox}>
+              <img
+                style={{
+                  width: "100%",
+                  display: "block",
+                  maxHeight: "100%",
+                  borderRadius: 16,
+                }}
+                src={infoProduto.imagem}
+                alt="foto do produto"
+              />
+            </div>
           </div>
-
-          <TextField
-            label="Descrição do produto"
-            {...register("descricao")}
-            type="text"
-          />
-
-          <TextField label="Imagem" {...register("imagem")} type="text" />
 
           <Divider />
 
@@ -152,25 +179,6 @@ function EditarProduto() {
           </div>
         </form>
         {erro && <Alert severity="error">{erro}</Alert>}
-      </div>
-      <div
-        style={{
-          width: 310,
-          height: 402,
-          alignSelf: "center",
-          background: "yellowgreen",
-        }}
-      >
-        <img
-          style={{
-            width: "100%",
-            display: "block",
-            maxHeight: "100%",
-            borderRadius: 16,
-          }}
-          src={infoProduto.imagem}
-          alt="foto do produto"
-        />
       </div>
     </div>
   );
