@@ -27,12 +27,16 @@ export const useStyles = makeStyles((theme) => ({
   },
   divider: {
     marginTop: 50,
-    width: "150%",
   },
 
   link: {
     marginRight: 24,
     textDecoration: "underline",
+  },
+
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#fff",
   },
 }));
 
