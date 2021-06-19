@@ -31,6 +31,10 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 24,
     textDecoration: "underline",
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#fff",
+  },
 }));
 
 export const ColorButton = withStyles((theme) => ({
