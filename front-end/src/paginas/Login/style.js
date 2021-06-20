@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
 
     borderRadius: 16,
   },
+  textField: {
+    width: "70%",
+  },
   margin: {
     marginRight: 5,
   },
