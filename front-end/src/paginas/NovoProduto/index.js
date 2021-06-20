@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Link, useHistory } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
@@ -10,7 +10,6 @@ import Alert from "@material-ui/lab/Alert";
 import Divider from "@material-ui/core/Divider";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import clsx from "clsx";
 
 import { useStyles } from "./style";
 import { ColorButton } from "./style";
@@ -24,8 +23,25 @@ function NovoProduto() {
   const { handleSubmit, control } = useForm();
   const [erro, setErro] = useState("");
   const [carregando, setCarregando] = useState(false);
+  const [nomeLoja, setNomeLoja] = useState("");
 
   const { token } = useAuth();
+
+  useEffect(() => {
+    const getPerfil = async () => {
+      const resposta = await fetch(`http://localhost:8000/perfil`, {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const { nome_loja } = await resposta.json();
+
+      setNomeLoja(nome_loja);
+    };
+
+    getPerfil();
+  }, []);
 
   async function onSubmit(data) {
     setCarregando(true);
@@ -62,7 +78,7 @@ function NovoProduto() {
         <CircularProgress color="inherit" />
       </Backdrop>
       <div className={classes.lojaContainer}>
-        <Typography variant="h3">Nome da Loja</Typography>
+        <Typography variant="h3">{nomeLoja}</Typography>
         <Typography className={classes.subtitle} variant="subtitle1">
           Adicionar produto
         </Typography>

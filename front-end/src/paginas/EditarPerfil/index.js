@@ -33,6 +33,10 @@ function EditarPerfil() {
   const { register, control, handleSubmit, getValues } = useForm({
     mode: "onChange",
     reValidateMode: "onSubmit",
+    defaultValues: {
+      senha: "",
+      repetirSenha: "",
+    },
   });
 
   const { token } = useAuth();
@@ -104,7 +108,6 @@ function EditarPerfil() {
           <TextField
             className={clsx(classes.margin)}
             label="Nova senha"
-            id="password"
             {...register("senha")}
             type={values.showPassword ? "text" : "password"}
             InputProps={{
@@ -125,10 +128,13 @@ function EditarPerfil() {
           <Controller
             name="repetirSenha"
             control={control}
-            defaultValue=""
             rules={{
-              validate: (value) =>
-                value === getValues("senha") || "Senhas precisam ser iguais",
+              validate: (value) => {
+                console.log(value, getValues("senha"));
+                return (
+                  value === getValues("senha") || "Senhas precisam ser iguais"
+                );
+              },
             }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <TextField

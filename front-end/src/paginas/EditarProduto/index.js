@@ -38,10 +38,15 @@ function EditarProduto() {
   async function onSubmit(data) {
     setCarregando(true);
     setErro("");
+
+    const dadosAtualizados = Object.fromEntries(
+      Object.entries(data).filter(([, value]) => value)
+    );
+
     try {
       const resposta = await fetch(`http://localhost:8000/products/${id}`, {
         method: "PUT",
-        body: JSON.stringify(data),
+        body: JSON.stringify(dadosAtualizados),
         headers: {
           "Content-type": "application/json",
           Authorization: `Bearer ${token}`,

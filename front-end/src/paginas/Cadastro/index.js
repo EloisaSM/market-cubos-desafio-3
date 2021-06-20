@@ -6,18 +6,13 @@ import Typography from "@material-ui/core/Typography";
 import Alert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import useStyles from "./style";
-import clsx from "clsx";
 import IconButton from "@material-ui/core/IconButton";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import FormControl from "@material-ui/core/FormControl";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
 import { Link, useHistory } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
-import { FormHelperText } from "@material-ui/core";
 
 function Cadastro() {
   const classes = useStyles();
