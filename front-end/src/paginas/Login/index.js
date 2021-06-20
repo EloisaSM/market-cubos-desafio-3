@@ -4,6 +4,10 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Alert from "@material-ui/lab/Alert";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import IconButton from "@material-ui/core/IconButton";
+import InputAdornment from "@material-ui/core/InputAdornment";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import useStyles from "./style";
 
@@ -14,16 +18,23 @@ import useAuth from "../../hook/useAuth";
 
 function Login() {
   const classes = useStyles();
-  const {
-    control,
-    formState: { errors },
-    handleSubmit,
-  } = useForm();
+  const { control, handleSubmit } = useForm();
   const history = useHistory();
   const [erro, setErro] = useState("");
   const [carregando, setCarregando] = useState(false);
+  const [values, setValues] = useState({
+    showPassword: false,
+  });
 
   const { logar } = useAuth();
+
+  const handleClickShowPassword = () => {
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
+
+  const handleMostrarSenha = (event) => {
+    event.preventDefault();
+  };
 
   async function onSubmit(data) {
     setCarregando(true);
@@ -85,15 +96,30 @@ function Login() {
           name="senha"
           control={control}
           defaultValue=""
-          rules={{ required: "campo obrigatório" }}
+          rules={{ required: "Campo obrigatório" }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <TextField
-              label="senha"
-              type="password"
+              className={classes.textField}
+              label="Nova senha"
+              id="password"
               value={value}
+              type={values.showPassword ? "text" : "password"}
               onChange={onChange}
               error={!!error}
               helperText={error ? error.message : null}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMostrarSenha}
+                    >
+                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
           )}
         />
