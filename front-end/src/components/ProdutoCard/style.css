@@ -1,3 +1,14 @@
 .card-produto {
   width: 230px;
 }
+
+
+.produto-info {
+  margin-top: 11px;
+  display: flex;
+  justify-content: space-between;
+}
+.produt-estoque {
+  margin-right: 64px;
+  color: rgba(101, 101, 101, 0.87);
+}
