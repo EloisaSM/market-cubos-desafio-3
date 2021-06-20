@@ -10,6 +10,8 @@ import Typography from "@material-ui/core/Typography";
 
 import { useStyles } from "./style";
 
+import backupImg from "../../assets/backupImg.png";
+
 function ProdutoCard({
   nome,
   estoque,
@@ -25,7 +27,7 @@ function ProdutoCard({
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image={`${imagem}`}
+          image={`${imagem ? imagem : backupImg}`}
           title="Contemplative Reptile"
         />
         <CardContent>

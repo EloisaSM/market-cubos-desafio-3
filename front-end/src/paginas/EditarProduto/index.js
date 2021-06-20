@@ -21,6 +21,8 @@ import useStyles from "../EditarProduto/style";
 import Navbar from "../../components/Navbar/Navbar";
 import useAuth from "../../hook/useAuth";
 
+import backupImg from "../../assets/backupImg.png";
+
 function EditarProduto() {
   const classes = useStyles();
   const history = useHistory();
@@ -152,13 +154,8 @@ function EditarProduto() {
 
             <div className={classes.imgBox}>
               <img
-                style={{
-                  width: "100%",
-                  display: "block",
-                  maxHeight: "100%",
-                  borderRadius: 16,
-                }}
-                src={infoProduto.imagem}
+                className={classes.img}
+                src={infoProduto.imagem ? infoProduto.imagem : backupImg}
                 alt="foto do produto"
               />
             </div>

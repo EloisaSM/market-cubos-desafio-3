@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
   imgBox: {
     width: 310,
-    height: 402,
+    height: "auto",
     alignSelf: "center",
     background: "white",
     borderRadius: "16px",
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   img: {
     width: "100%",
     display: "block",
-    maxHeight: "100%",
+    maxHeight: 402,
     borderRadius: 16,
   },
   backdrop: {
