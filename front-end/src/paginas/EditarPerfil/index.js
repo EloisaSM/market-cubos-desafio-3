@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { Link, useHistory } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
 import TextField from "@material-ui/core/TextField";
 
@@ -9,10 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import Alert from "@material-ui/lab/Alert";
 import clsx from "clsx";
 import IconButton from "@material-ui/core/IconButton";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import FormControl from "@material-ui/core/FormControl";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import Divider from "@material-ui/core/Divider";
@@ -33,20 +30,23 @@ function EditarPerfil() {
   const [values, setValues] = useState({
     showPassword: false,
   });
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    watch,
-  } = useForm({ mode: "onChange" });
+  const { register, control, handleSubmit, getValues } = useForm({
+    mode: "onChange",
+    reValidateMode: "onSubmit",
+  });
 
   const { token } = useAuth();
 
-  const handleClickMostrarSenha = () => {
+  const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
   };
 
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   async function onSubmit(data) {
+    console.log(data);
     setCarregando(true);
     setErro("");
     const dadosAtualizados = Object.fromEntries(
@@ -93,7 +93,6 @@ function EditarPerfil() {
           onSubmit={handleSubmit(onSubmit)}
         >
           <TextField label="Seu nome" {...register("nome")} type="text" />
-
           <TextField
             label="Nome da Loja"
             {...register("nome_loja")}
@@ -102,48 +101,64 @@ function EditarPerfil() {
 
           <TextField label="Email" {...register("email")} type="email" />
 
-          <FormControl className={clsx(classes.margin, classes.textField)}>
-            <InputLabel htmlFor="senha">Senha</InputLabel>
-            <Input
-              id="senha-Repetida"
-              type={values.showPassword ? "text" : "password"}
-              endAdornment={
+          <TextField
+            className={clsx(classes.margin)}
+            label="Nova senha"
+            id="password"
+            {...register("senha")}
+            type={values.showPassword ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
-                    aria-label="mudando visibilidade da senha"
-                    onClick={handleClickMostrarSenha}
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
                   >
                     {values.showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
-              }
-            />
-          </FormControl>
+              ),
+            }}
+          />
 
-          <FormControl className={clsx(classes.margin, classes.textField)}>
-            <InputLabel htmlFor="senha">Repita a nova senha</InputLabel>
-            <Input
-              id="senha"
-              {...register("repetirSenha", {
-                validate: (value) => {
-                  return value === watch("senha");
-                },
-              })}
-              type={values.showPassword ? "text" : "password"}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="mudando visibilidade da senha"
-                    onClick={handleClickMostrarSenha}
-                  >
-                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </FormControl>
-          {errors.repetirSenha?.type === "validate" &&
-            "Senhas precisam ser iguais"}
+          <Controller
+            name="repetirSenha"
+            control={control}
+            defaultValue=""
+            rules={{
+              validate: (value) =>
+                value === getValues("senha") || "Senhas precisam ser iguais",
+            }}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextField
+                label="Nova senha"
+                value={value}
+                onChange={onChange}
+                className={clsx(classes.margin)}
+                error={!!error}
+                helperText={error ? error.message : null}
+                type={values.showPassword ? "text" : "password"}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                      >
+                        {values.showPassword ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
+          />
 
           <Divider className={classes.divider} />
 
