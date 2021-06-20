@@ -102,10 +102,11 @@ function NovoProduto() {
                 fieldState: { error },
               }) => (
                 <TextField
+                  className={classes.textField}
                   label="Preço"
-                  id="preco"
+                  onChange={onChange}
+                  value={value}
                   error={!!error}
-                  className={clsx(classes.margin, classes.textField)}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">$</InputAdornment>
@@ -126,10 +127,11 @@ function NovoProduto() {
                 fieldState: { error },
               }) => (
                 <TextField
+                  className={classes.textField}
                   label="Estoque"
-                  id="estoque"
+                  value={value}
+                  onChange={onChange}
                   error={!!error}
-                  className={clsx(classes.margin, classes.textField)}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">Un</InputAdornment>
@@ -149,7 +151,6 @@ function NovoProduto() {
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <TextField
                 className={classes.input}
-                size="small"
                 label="Descricao do produto"
                 value={value}
                 onChange={onChange}

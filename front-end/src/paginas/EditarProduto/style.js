@@ -47,6 +47,12 @@ const useStyles = makeStyles((theme) => ({
     background: "white",
     borderRadius: "16px",
   },
+  img: {
+    width: "100%",
+    display: "block",
+    maxHeight: "100%",
+    borderRadius: 16,
+  },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: "#fff",
