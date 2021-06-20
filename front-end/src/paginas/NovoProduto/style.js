@@ -26,6 +26,10 @@ export const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     gap: 24,
   },
+  input: {
+    width: "36%",
+  },
+
   divider: {
     marginTop: 50,
   },

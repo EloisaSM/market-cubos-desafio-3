@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 
 import { Link, useHistory } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
-import Input from "@material-ui/core/Input";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -13,6 +10,7 @@ import Alert from "@material-ui/lab/Alert";
 import Divider from "@material-ui/core/Divider";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import clsx from "clsx";
 
 import { useStyles } from "./style";
 import { ColorButton } from "./style";
@@ -23,7 +21,7 @@ import useAuth from "../../hook/useAuth";
 function NovoProduto() {
   const classes = useStyles();
   const history = useHistory();
-  const { register, handleSubmit } = useForm();
+  const { handleSubmit, control } = useForm();
   const [erro, setErro] = useState("");
   const [carregando, setCarregando] = useState(false);
 
@@ -75,41 +73,105 @@ function NovoProduto() {
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <TextField
-            label="Nome do produto"
-            {...register("nome")}
-            type="text"
+          <Controller
+            className={classes.input}
+            name="nome"
+            control={control}
+            defaultValue=""
+            rules={{ required: "campo obrigatório" }}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextField
+                className={classes.input}
+                label="Nome do Produto"
+                value={value}
+                onChange={onChange}
+                error={!!error}
+                helperText={error ? error.message : null}
+              />
+            )}
           />
 
           <div className={classes.precoEstoqueContainer}>
-            <FormControl className={classes.margin}>
-              <InputLabel htmlFor="standard-adornment-amount">Preço</InputLabel>
-              <Input
-                {...register("preco")}
-                startAdornment={
-                  <InputAdornment position="start">$</InputAdornment>
-                }
-              />
-            </FormControl>
+            <Controller
+              name="preco"
+              control={control}
+              defaultValue=""
+              rules={{ required: "campo obrigatório" }}
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  label="Preço"
+                  id="preco"
+                  error={!!error}
+                  className={clsx(classes.margin, classes.textField)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">$</InputAdornment>
+                    ),
+                  }}
+                  helperText={error ? error.message : null}
+                />
+              )}
+            />
 
-            <FormControl className={classes.margin}>
-              <InputLabel htmlFor="standard-adornment-amount">Preço</InputLabel>
-              <Input
-                {...register("estoque")}
-                startAdornment={
-                  <InputAdornment position="start">Un</InputAdornment>
-                }
-              />
-            </FormControl>
+            <Controller
+              name="estoque"
+              control={control}
+              defaultValue=""
+              rules={{ required: "campo obrigatório" }}
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  label="Estoque"
+                  id="estoque"
+                  error={!!error}
+                  className={clsx(classes.margin, classes.textField)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">Un</InputAdornment>
+                    ),
+                  }}
+                  helperText={error ? error.message : null}
+                />
+              )}
+            />
           </div>
 
-          <TextField
-            label="Descrição do produto"
-            {...register("descricao")}
-            type="text"
+          <Controller
+            name="descricao"
+            control={control}
+            defaultValue=""
+            rules={{ required: "campo obrigatório" }}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextField
+                className={classes.input}
+                size="small"
+                label="Descricao do produto"
+                value={value}
+                onChange={onChange}
+                error={!!error}
+                helperText={error ? error.message : null}
+              />
+            )}
           />
 
-          <TextField label="Imagem" {...register("imagem")} type="text" />
+          <Controller
+            name="imagem"
+            control={control}
+            defaultValue=""
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextField
+                className={classes.input}
+                label="Imagem"
+                value={value}
+                onChange={onChange}
+              />
+            )}
+          />
 
           <Divider className={classes.divider} />
 
