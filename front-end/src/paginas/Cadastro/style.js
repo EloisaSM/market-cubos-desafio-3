@@ -29,8 +29,8 @@ const useStyles = makeStyles((theme) => ({
     padding: 45,
   },
 
-  widthSenha: {
-    width: "80%",
+  textField: {
+    width: "79%",
   },
 }));
 

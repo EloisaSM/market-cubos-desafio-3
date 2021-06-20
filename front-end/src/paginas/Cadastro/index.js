@@ -16,16 +16,15 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
 import { Link, useHistory } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import { FormHelperText } from "@material-ui/core";
 
 function Cadastro() {
   const classes = useStyles();
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    watch,
-  } = useForm({ mode: "onChange" });
+  const { register, control, handleSubmit, getValues } = useForm({
+    mode: "onChange",
+    reValidateMode: "onSubmit",
+  });
   const history = useHistory();
   const [erro, setErro] = useState("");
   const [carregando, setCarregando] = useState(false);
@@ -34,8 +33,12 @@ function Cadastro() {
     showPassword: false,
   });
 
-  const handleClickMostrarSenha = () => {
+  const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
   };
 
   async function onSubmit(data) {
@@ -75,72 +78,113 @@ function Cadastro() {
           onSubmit={handleSubmit(onSubmit)}
         >
           <Typography variant="h4">Criar uma conta </Typography>
-          <TextField
-            label="Nome"
-            {...register("nome", {
-              required: true,
-            })}
-            type="text"
+
+          <Controller
+            name="nome"
+            control={control}
+            defaultValue=""
+            rules={{ required: "campo obrigatório" }}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextField
+                label="Nome"
+                value={value}
+                onChange={onChange}
+                error={!!error}
+                helperText={error ? error.message : null}
+              />
+            )}
           />
-          {errors.nome?.type === "required" && "Campo Obrigatório"}
+
+          <Controller
+            name="nome_loja"
+            control={control}
+            defaultValue=""
+            rules={{ required: "campo obrigatório" }}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextField
+                label="Nome da loja"
+                value={value}
+                onChange={onChange}
+                error={!!error}
+                helperText={error ? error.message : null}
+              />
+            )}
+          />
+
+          <Controller
+            name="email"
+            control={control}
+            defaultValue=""
+            rules={{ required: "campo obrigatório" }}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextField
+                label="Email"
+                value={value}
+                onChange={onChange}
+                error={!!error}
+                helperText={error ? error.message : null}
+              />
+            )}
+          />
 
           <TextField
-            label="Nome da Loja"
-            {...register("nomeLoja", { required: true })}
-            type="text"
-          />
-          {errors.nomeLoja?.type === "required" && "Campo Obrigatório"}
-
-          <TextField
-            label="Email"
-            {...register("email", { required: true })}
-            type="email"
-          />
-          {errors.email?.type === "required" && "Campo Obrigatório"}
-
-          <FormControl className={clsx(classes.widthSenha)}>
-            <InputLabel htmlFor="senha">Senha</InputLabel>
-            <Input
-              id="senha"
-              {...register("senha")}
-              type={values.showPassword ? "text" : "password"}
-              endAdornment={
+            className={classes.textField}
+            label="Senha"
+            id="password"
+            {...register("senha")}
+            type={values.showPassword ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
-                    aria-label="mudando visibilidade da senha"
-                    onClick={handleClickMostrarSenha}
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
                   >
                     {values.showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
-              }
-            />
-          </FormControl>
+              ),
+            }}
+          />
 
-          <FormControl className={clsx(classes.widthSenha)}>
-            <InputLabel htmlFor="senha">Repita a nova senha</InputLabel>
-            <Input
-              id="senha-repetida"
-              {...register("repetirSenha", {
-                validate: (value) => {
-                  return value === watch("senha");
-                },
-              })}
-              type={values.showPassword ? "text" : "password"}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="mudando visibilidade da senha"
-                    onClick={handleClickMostrarSenha}
-                  >
-                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </FormControl>
-          {errors.repetirSenha?.type === "validate" &&
-            "Senhas precisam ser iguais"}
+          <Controller
+            name="repetirSenha"
+            control={control}
+            defaultValue=""
+            rules={{
+              validate: (value) =>
+                value === getValues("senha") || "Senhas precisam ser iguais",
+            }}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextField
+                className={classes.textField}
+                label="Repetir senha"
+                value={value}
+                onChange={onChange}
+                error={!!error}
+                helperText={error ? error.message : null}
+                type={values.showPassword ? "text" : "password"}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                      >
+                        {values.showPassword ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
+          />
 
           <Button variant="contained" color="primary" type="submit">
             CRIAR CONTA
